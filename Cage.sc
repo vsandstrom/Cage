@@ -139,6 +139,8 @@ Cage {
 
 			env = EnvGen.kr(env, trigger, doneAction: 2);
 
+			// Tried to use LoopBuf.ar, but behaves weirdly.
+
 			// sig = LoopBuf.ar(
 			// 	1, 
 			// 	\buf.kr(0), 
@@ -147,6 +149,10 @@ Cage {
 			// 	startLoop: ( BufFrames.kr(\buf.kr) * 0.2 ), 
 			// 	endLoop: ( BufFrames.kr(\buf.kr) * 0.8 ),
 			// 	interpolation: 2);
+
+
+			// PlayBuf works, but for continuous sound, you need long samples, 
+			// where they do not need to loop. 
 
 			sig = PlayBuf.ar(
 				1, 
