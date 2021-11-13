@@ -1,11 +1,7 @@
 /* 
-Create class that takes lists of start-stop data, durations and sound-numbers as input, 
-gets the right sound and 
-plays it for the correct duration. Maybe keep track of previous sustain-data, to make "informed
-decisions" of how this performer wants to frase each event. 
-
-Loop with count = count + 1 and 1.wait to step through seconds. Class takes count as argument, 
-triggers a random number based on duration of start-possibilities and stop-possibilities.
+Cage takes a lists of start-stop data, durations and sound-numbers as input, 
+gets the unique sound and plays it for the correct duration. Keeps track of previous 
+sustain-data, to make "informed decisions" of how this performer wants to frase each event. 
 
 Remember what ratio to duration it has previously performed.  
 ex. if it can start between 00:00 and 1:00, there is 60 seconds of possibility, if it decides to 
@@ -74,6 +70,10 @@ s.waitForBoot({
 
 	for (1, 12, {|i|
 		var buf;
+		/* 
+		Add your samples in Current Working Directory, in a folder called samples
+		and name them consecutively, as: 1.wav, 2.wav, 3.wav osv.
+		*/
 		buf = Buffer.read(s, path +/+ "samples/" ++ i.asString ++ " .wav");
 		sounds.add(buf);
 	});

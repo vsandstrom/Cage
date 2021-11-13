@@ -10,15 +10,25 @@ Cage {
 	}
 
 	init {
-		buffers = buffers.scramble; // if more sounds supplied than needed, they get to be heard.
-		dict = Dictionary.new(12);
+		var num = score.asSet.size;
 
-		for (0, ( score.asSet.size - 1 ), {|i| // Create dictionary for unique identifier
-			dict.add(i -> buffers[i]);
-		});
+		if (num > buffers.size){
+			^Error("Number of supplied buffers does not match number of unique numbers in score").throw;
+		}{
 
-		// dict.postln;
-		this.synthDef;
+			// Scramble sounds supplied before hashing.
+			buffers = buffers.scramble; 
+			dict = Dictionary.new(num);
+
+			// create dictionary to associate one sound to each unique identifier in score.
+			for (0, ( num - 1 ), {|i| 
+				dict.add(i -> buffers[i]);
+			});
+
+			this.synthDef;
+
+		};
+		
 
 	} 
 
@@ -36,6 +46,7 @@ Cage {
 			1.wait;
 
 			loop{
+				("second: " ++ count.asString).postln;
 				for (0, ( score.size - 1 ), {|i|
 
 
@@ -66,8 +77,12 @@ Cage {
 						);
 
 						// ( stoptime + stopRand ) - ( starttime + startRand ) = Duration
-						startStop.postln;
 						dur = ( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime);
+						"--------------------------".postln;
+						("SYMBOL %".format(score[i])).postln;
+						("Starting in " ++ ( startTime ) ++ "seconds").postln;
+						("Stopping in: " ++ (dur + startTime) ++ "seconds").postln;
+						"--------------------------".postln;
 
 						// // REMEMBER SUBTRACTING FROM TOTALDUR!!!!
 						totalDur = totalDur - (startTime + dur);
@@ -90,12 +105,11 @@ Cage {
 						final = True;
 					};
 
-					if (count != 1800 || final != True) {
-					} {
+					if (count == 1800 || final == True) {	
 						thisFunction.stop;
 					};
 				});
-				("second: " ++ count.asString).postln;
+				// ("second: " ++ count.asString).postln;
 
 				1.wait;
 
@@ -125,7 +139,23 @@ Cage {
 
 			env = EnvGen.kr(env, trigger, doneAction: 2);
 
-			sig = PlayBuf.ar(1, \buf.kr(0), 1, trigger, loop: 1);
+			// sig = LoopBuf.ar(
+			// 	1, 
+			// 	\buf.kr(0), 
+			// 	1,
+			// 	trigger,
+			// 	startLoop: ( BufFrames.kr(\buf.kr) * 0.2 ), 
+			// 	endLoop: ( BufFrames.kr(\buf.kr) * 0.8 ),
+			// 	interpolation: 2);
+
+			sig = PlayBuf.ar(
+				1, 
+				\buf.kr(0), 
+				1,
+				trigger,
+				loop: 1
+			);
+
 			Out.ar(0, sig * env * 0.32);
 
 		}).add;
