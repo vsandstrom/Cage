@@ -7,7 +7,7 @@ Remember what ratio to duration it has previously performed.
 ex. if it can start between 00:00 and 1:00, there is 60 seconds of possibility, if it decides to 
 play at 0:17, the ratio is ≈ 0.3, and maybe performes close to that ratio often?
 */
-
+Literals
 
 
 s.waitForBoot({
