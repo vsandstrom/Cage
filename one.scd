@@ -11,20 +11,27 @@ play at 0:17, the ratio is ≈ 0.3, and maybe performes close to that ratio ofte
 s.waitForBoot({
 
 	var time = 0;
-	var totalDur = 1800;
+	//var totalDur = 1800;
+	var totalDur = 10;
 	var path = File.getcwd; // Directory of this supercollider file.
 
 	var score = #[ // Score of which sound that is supposed to be played.
 		// page 1
-		2, 4, 9, 11, 5, 8, 2, 8, 
+		2,  4,  9, 11,
+		5,  8,  2,  8, 
 		// page 2
-		8, 4, 8, 5, 2, 5, 8, 8, 8,
+		8,  4,  8,  5,  2,
+		5,  8,  8,  8,
 		// page 3
-		7, 6, 7, 2, 7, 8, 3, 8,
+		7,  6,  7,  2,
+		7,  8,  3,  8,
 		// page 4
-		6, 7, 8, 12, 4, 12, 7, 6,
+		6,  7,  8, 12, 
+		4, 12,  7,  6,
 		// page 5
-		12, 7, 5, 3, 9, 7, 5, 5, 8, 11
+	   12,  7,  5,  3,
+		9,  7,  5,  5,
+		8, 11
 	];
 
 	var dur = #[ // Duration of each start and stop for each event
@@ -65,13 +72,13 @@ s.waitForBoot({
 
 	var sounds = Array.new(12);
 
-	for (1, 12, {|i|
+	for (1, 12, {|i| 
 		var buf;
 		/* 
 		Add your samples in Current Working Directory, in a folder called samples
 		and name them consecutively, as: 1.wav, 2.wav, 3.wav osv.
 		*/
-		buf = Buffer.read(s, path +/+ "samples/" ++ i.asString ++ " .wav");
+		buf = Buffer.read(s, path +/+ "samples/" ++ i.asString ++ ".wav");
 		sounds.add(buf);
 	});
 

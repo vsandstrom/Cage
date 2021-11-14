@@ -41,13 +41,12 @@ Cage {
 			var startTime = 0;
 			var stopTime = 0;
 			var dur = 0;
-			var final = false;
 
 			1.wait;
 
 			loop{
 				("second: " ++ count.asString).postln;
-				for (0, ( score.size - 1 ), {|i|
+				for (0, (score.size - 1), {|i| 
 
 
 					// if count value correspond to a startvalue
@@ -66,7 +65,6 @@ Cage {
 						startTime = startStopDur[i][0] * startRatio;
 						stopTime = startStopDur[i][1] * stopRatio;
 
-						playhead = i;
 						
 						startRatio = 1 * ( 
 							startRatio * (startRand / startStopDur[i][0]) 
@@ -77,18 +75,13 @@ Cage {
 
 						// ( stoptime + stopRand ) - ( starttime + startRand ) = Duration
 						dur = ( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime);
+
 						"--------------------------".postln;
 						("SYMBOL [ % ]".format(score[i])).postln;
 						("Starting in: % seconds".format(startTime)).postln;
 						("Stopping in: % seconds".format((dur+startTime))).postln;
 						"--------------------------".postln;
 
-						// // REMEMBER SUBTRACTING FROM TOTALDUR!!!!
-						totalDur = totalDur - (startTime + dur);
-
-
-
-						
 						// Create synth with delaytime within synthdef.
 						Synth(\cage, 
 							[
@@ -100,20 +93,18 @@ Cage {
 						);
 					};
 
-					if (playhead == ( score.size - 1 )) {
-						final = True;
-					};
-
-					if (count == totalDur || final == True) {	
-						thisFunction.stop;
+					playhead = playhead + 1;
+					if ( playhead == score.size || count == totalDur){
+						/*
+						Check if we reached the last event in score or the
+						maximum duration of the piece.
+						*/
+						thisThread.stop;
 					};
 				});
-				// ("second: " ++ count.asString).postln;
 
 				1.wait;
-
 				count = count + 1;
-
 			};
 		}).play;
 	}
@@ -138,7 +129,19 @@ Cage {
 
 			env = EnvGen.kr(env, trigger, doneAction: 2);
 
-			// Tried to use LoopBuf.ar, but behaves weirdly.
+			// PlayBuf works, but for continuous sound, you need long samples.
+			// Does not loop seamlessly
+
+			// sig = PlayBuf.ar( 1, 
+			// 	\buf.kr(0), 
+			// 	1,
+			// 	trigger,
+			// 	loop: 1
+			// );
+
+
+			// LoopBuf is built for use with an Attack - Hold - Release type envelope.
+			// Drops sample as soon as its gate is <= 0
 
 			// sig = LoopBuf.ar(
 			// 	1, 
@@ -151,21 +154,11 @@ Cage {
 			// 	interpolation: 2);
 
 
-			// PlayBuf works, but for continuous sound, you need long samples, 
-			// where they do not need to loop. 
-
-			// sig = PlayBuf.ar(
-			// 	1, 
-			// 	\buf.kr(0), 
-			// 	1,
-			// 	trigger,
-			// 	loop: 1
-			// );
 
 			sig = Warp1.ar(
 				1, 
 				\buf.kr(0),
-				Phasor.kr(trigger, SampleDur.ir / BufDur.ir(\buf.kr)),
+				Phasor.kr(trigger, SampleDur.ir / BufDur.ir(\buf.kr) / dur ),
 				1, 
 				0.3,
 				-1,
@@ -173,6 +166,8 @@ Cage {
 				0.23,
 				4
 			);
+
+			// Should there be a Compander.ar here? 
 
 			Out.ar(0, sig!2 * env * 0.32);
 
