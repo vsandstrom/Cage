@@ -104,7 +104,7 @@ Cage {
 						final = True;
 					};
 
-					if (count == 1800 || final == True) {	
+					if (count == totalDur || final == True) {	
 						thisFunction.stop;
 					};
 				});
@@ -144,24 +144,37 @@ Cage {
 			// 	1, 
 			// 	\buf.kr(0), 
 			// 	1,
-			// 	trigger,
+			// 	trigger, // when trigger is 0, it will play rest of buffer and die.
+			// 	0.0,
 			// 	startLoop: ( BufFrames.kr(\buf.kr) * 0.2 ), 
-			// 	endLoop: ( BufFrames.kr(\buf.kr) * 0.8 ),
+			// 	endLoop: ( BufFrames.kr(\buf.kr) * 0.3 ),
 			// 	interpolation: 2);
 
 
 			// PlayBuf works, but for continuous sound, you need long samples, 
 			// where they do not need to loop. 
 
-			sig = PlayBuf.ar(
+			// sig = PlayBuf.ar(
+			// 	1, 
+			// 	\buf.kr(0), 
+			// 	1,
+			// 	trigger,
+			// 	loop: 1
+			// );
+
+			sig = Warp1.ar(
 				1, 
-				\buf.kr(0), 
-				1,
-				trigger,
-				loop: 1
+				\buf.kr(0),
+				Phasor.kr(trigger, SampleDur.ir / BufDur.ir(\buf.kr)),
+				1, 
+				0.3,
+				-1,
+				8,
+				0.23,
+				4
 			);
 
-			Out.ar(0, sig * env * 0.32);
+			Out.ar(0, sig!2 * env * 0.32);
 
 		}).add;
 

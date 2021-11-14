@@ -7,16 +7,14 @@ Remember what ratio to duration it has previously performed.
 ex. if it can start between 00:00 and 1:00, there is 60 seconds of possibility, if it decides to 
 play at 0:17, the ratio is ≈ 0.3, and maybe performes close to that ratio often?
 */
-Literals
-
 
 s.waitForBoot({
 
 	var time = 0;
 	var totalDur = 1800;
-	var path = File.getcwd;
+	var path = File.getcwd; // Directory of this supercollider file.
 
-	var score = #[ 
+	var score = #[ // Score of which sound that is supposed to be played.
 		// page 1
 		2, 4, 9, 11, 5, 8, 2, 8, 
 		// page 2
@@ -29,7 +27,7 @@ s.waitForBoot({
 		12, 7, 5, 3, 9, 7, 5, 5, 8, 11
 	];
 
-	var dur = #[
+	var dur = #[ // Duration of each start and stop for each event
 		[75, 70], [90, 90], [45, 45], [45, 45], // page1
 		[60, 60], [75, 75], [90, 90], [90, 90],
 		// page 2
@@ -46,7 +44,7 @@ s.waitForBoot({
 		[75, 70], [75, 70], [75, 70], [45, 45], 
 		[30, 30], [25, 15]];
 
-	var ss = #[
+	var ss = #[ // Start/stop time for each event
 		// page 1
 		[0, 55], [0, 60], [110, 140], [170, 200],
 		[180, 220], [220, 275], [250, 310], [315, 375],
@@ -80,6 +78,7 @@ s.waitForBoot({
 	s.sync;
 
 	c = Cage.new(totalDur: totalDur, buffers: sounds, score: score, startStop: ss, startStopDur: dur);
+
 
 	c.play;
 	// c.stop;
