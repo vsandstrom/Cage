@@ -58,30 +58,29 @@ Cage {
 						stopRand = 1.0.sum3rand.abs;
 						if (startRatio == 0){
 							startRatio = startRand; stopRatio = stopRand;
-						}{
-							// get mean value abs
+						}{ // get mean value abs
 							startRatio = ( startRatio + startRand ) / 2;
 							stopRatio = ( stopRatio + stopRand ) / 2;
 						};
 
-						startTime = startStopDur[i+1][0] * startRatio;
-						stopTime = startStopDur[i+1][1] * stopRatio;
+						startTime = startStopDur[i][0] * startRatio;
+						stopTime = startStopDur[i][1] * stopRatio;
 
 						playhead = i;
 						
 						startRatio = 1 * ( 
-							startRatio * (startRand / startStopDur[i+1][0]) 
+							startRatio * (startRand / startStopDur[i][0]) 
 						);
 						stopRatio = 1 * ( 
-							stopRatio * (stopRand / startStopDur[i+1][1]) 
+							stopRatio * (stopRand / startStopDur[i][1]) 
 						);
 
 						// ( stoptime + stopRand ) - ( starttime + startRand ) = Duration
 						dur = ( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime);
 						"--------------------------".postln;
-						("SYMBOL %".format(score[i])).postln;
-						("Starting in " ++ ( startTime ) ++ "seconds").postln;
-						("Stopping in: " ++ (dur + startTime) ++ "seconds").postln;
+						("SYMBOL [ % ]".format(score[i])).postln;
+						("Starting in: % seconds".format(startTime)).postln;
+						("Stopping in: % seconds".format((dur+startTime))).postln;
 						"--------------------------".postln;
 
 						// // REMEMBER SUBTRACTING FROM TOTALDUR!!!!
@@ -166,7 +165,8 @@ Cage {
 
 		}).add;
 
-		"SynthDef added to server".postln
+		" ".postln;
+		"SynthDef added to server".postln;
 	}
 }
 
