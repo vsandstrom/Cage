@@ -11,8 +11,8 @@ play at 0:17, the ratio is ≈ 0.3, and maybe performes close to that ratio ofte
 s.waitForBoot({
 
 	var time = 0;
-	//var totalDur = 1800;
-	var totalDur = 10;
+	var totalDur = 1800;
+	var numSounds = 12 
 	var path = File.getcwd; // Directory of this supercollider file.
 
 	var score = #[ // Score of which sound that is supposed to be played.
@@ -70,9 +70,9 @@ s.waitForBoot({
 		[1750, 1780], [1785, 1795],
 	];
 
-	var sounds = Array.new(12);
+	var sounds = Array.new(numSounds);
 
-	for (1, 12, {|i| 
+	for (1, numSounds, {|i| 
 		var buf;
 		/* 
 		Add your samples in Current Working Directory, in a folder called samples
