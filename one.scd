@@ -10,11 +10,10 @@ play at 0:17, the ratio is ≈ 0.3, and maybe performes close to that ratio ofte
 
 s.waitForBoot({
 
-	var time = 0;
 	var totalDur = 1800;
-	var numSounds = 12 
+	var numSounds = 12;
 	var path = File.getcwd; // Directory of this supercollider file.
-	
+
 	var score = #[ // Score of which sound that is supposed to be played.
 		// page 1
 		2,  4,  9, 11,
@@ -33,7 +32,7 @@ s.waitForBoot({
 		9,  7,  5,  5,
 		8, 11
 	];
-	
+
 	var ss = #[ // Start/stop time for each event
 		// page 1
 		[0, 55], [0, 60], [110, 140], [170, 200],
@@ -68,9 +67,10 @@ s.waitForBoot({
 		// page 5
 		[90, 90], [60, 60], [75, 70], [90, 90],
 		[75, 70], [75, 70], [75, 70], [45, 45], 
-		[30, 30], [25, 15]];
+		[30, 30], [25, 15]
+	];
 
-	var sounds = Array.new(numSounds);
+	var sounds = Array.new(numSounds); 
 
 	for (1, numSounds, {|i| 
 		var buf;
@@ -83,11 +83,10 @@ s.waitForBoot({
 	});
 
 	s.sync;
-
 	c = Cage.new(totalDur: totalDur, buffers: sounds, score: score, startStop: ss, startStopDur: dur);
 
-
 	c.play;
-	// c.stop;
 		
 });
+	
+c.stop; // emergency break
