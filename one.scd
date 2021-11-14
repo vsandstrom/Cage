@@ -15,7 +15,6 @@ s.waitForBoot({
 	var numSounds = 12 
 	var path = File.getcwd; // Directory of this supercollider file.
 	
-
 	var score = #[ // Score of which sound that is supposed to be played.
 		// page 1
 		2,  4,  9, 11,
@@ -34,7 +33,6 @@ s.waitForBoot({
 		9,  7,  5,  5,
 		8, 11
 	];
-	
 	
 	var ss = #[ // Start/stop time for each event
 		// page 1
@@ -55,7 +53,6 @@ s.waitForBoot({
 		[1750, 1780], [1785, 1795],
 	];
 	
-	
 	var dur = #[ // Duration of each start and stop for each event
 		[75, 70], [90, 90], [45, 45], [45, 45], // page1
 		[60, 60], [75, 75], [90, 90], [90, 90],
@@ -72,7 +69,6 @@ s.waitForBoot({
 		[90, 90], [60, 60], [75, 70], [90, 90],
 		[75, 70], [75, 70], [75, 70], [45, 45], 
 		[30, 30], [25, 15]];
-
 
 	var sounds = Array.new(numSounds);
 
