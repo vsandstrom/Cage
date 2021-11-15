@@ -74,7 +74,7 @@ Cage {
 						);
 
 						// ( stoptime + stopRand ) - ( starttime + startRand ) = Duration
-						dur = ( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime);
+						dur = (( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime)).abs; // abs is nödlösning
 
 						"--------------------------".postln;
 						("SYMBOL [ % ]".format(score[i])).postln;
