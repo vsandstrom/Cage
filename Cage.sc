@@ -1,12 +1,12 @@
 Cage {
-	var totalDur, buffers, score, startStop, startStopDur;
+	var totalDur, buffers, score, startStop, startStopDur, mode;
 	var playRoutine, dict;
 	var startRatio = 0, stopRatio = 0;
 
 
-	*new { | totalDur, buffers, score, startStop, startStopDur |
+	*new { | totalDur, buffers, score, startStop, startStopDur, mode = 1|
 		// buffers.postln;
-		^super.newCopyArgs(totalDur, buffers, score, startStop, startStopDur).init;
+		^super.newCopyArgs(totalDur, buffers, score, startStop, startStopDur, mode).init;
 	}
 
 	init {
@@ -114,65 +114,104 @@ Cage {
 	}
 
 	synthDef {
-		SynthDef(\cage, {
-			var sig, env, buf, trigger, atk, dur, rel;
-			trigger = 0;
 
-			dur = \dur.kr(0);
-			atk = 0.35;
-			rel = 0.45;
-			dur = dur - (atk + rel);
+		if (mode == 1) {
 
-			trigger = TDelay.kr(\t_trig.kr(0), \delay.kr(0));
+			SynthDef(\cage, {
+				var sig, env, buf, trigger, atk, dur, rel;
+				trigger = 0;
 
-			env = Env.new([0, 1, 1, 0], [atk, dur, rel], [-4, 0, 0, 4]);
+				dur = \dur.kr(0);
+				atk = 0.35;
+				rel = 0.45;
+				dur = dur - (atk + rel);
 
-			env = EnvGen.kr(env, trigger, doneAction: 2);
+				trigger = TDelay.kr(\t_trig.kr(0), \delay.kr(0));
 
-			// PlayBuf works, but for continuous sound, you need long samples.
-			// Does not loop seamlessly
+				env = Env.new([0, 1, 1, 0], [atk, dur, rel], [-4, 0, 0, 4]);
 
-			// sig = PlayBuf.ar( 1, 
-			// 	\buf.kr(0), 
-			// 	1,
-			// 	trigger,
-			// 	loop: 1
-			// );
-
-
-			// LoopBuf is built for use with an Attack - Hold - Release type envelope.
-			// Drops sample as soon as its gate is <= 0
-
-			// sig = LoopBuf.ar(
-			// 	1, 
-			// 	\buf.kr(0), 
-			// 	1,
-			// 	trigger, // when trigger is 0, it will play rest of buffer and die.
-			// 	0.0,
-			// 	startLoop: ( BufFrames.kr(\buf.kr) * 0.2 ), 
-			// 	endLoop: ( BufFrames.kr(\buf.kr) * 0.3 ),
-			// 	interpolation: 2);
+				env = EnvGen.kr(env, trigger, doneAction: 2);
 
 
 
-			sig = Warp1.ar(
-				1, 
-				\buf.kr(0),
-				Phasor.kr(trigger, SampleDur.ir / BufDur.ir(\buf.kr) / dur ),
-				1, 
-				0.3,
-				-1,
-				8,
-				0.23,
-				4
-			);
+				// LoopBuf is built for use with an Attack - Hold - Release type envelope.
+				// Drops sample as soon as its gate is <= 0
 
-			// Should there be a Compander.ar here? 
+				// sig = LoopBuf.ar(
+				// 	1, 
+				// 	\buf.kr(0), 
+				// 	1,
+				// 	trigger, // when trigger is 0, it will play rest of buffer and die.
+				// 	0.0,
+				// 	startLoop: ( BufFrames.kr(\buf.kr) * 0.2 ), 
+				// 	endLoop: ( BufFrames.kr(\buf.kr) * 0.3 ),
+				// 	interpolation: 2);
 
-			Out.ar(0, sig!2 * env * 0.32);
 
-		}).add;
 
+				sig = Warp1.ar(
+					1, 
+					\buf.kr(0),
+					Phasor.kr(trigger, SampleDur.ir / BufDur.ir(\buf.kr) / dur ),
+					1, 
+					0.3,
+					-1,
+					8,
+					0.23,
+					4
+				);
+
+				// Should there be a Compander.ar here? 
+
+				Out.ar(0, sig!2 * env * 0.32);
+
+			}).add;
+		};
+		if (mode == 2) {
+			SynthDef(\cage, {
+				var sig, env, buf, trigger, atk, dur, rel;
+				trigger = 0;
+
+				dur = \dur.kr(0);
+				atk = 0.35;
+				rel = 0.45;
+				dur = dur - (atk + rel);
+
+				trigger = TDelay.kr(\t_trig.kr(0), \delay.kr(0));
+
+				env = Env.new([0, 1, 1, 0], [atk, dur, rel], [-4, 0, 0, 4]);
+
+				env = EnvGen.kr(env, trigger, doneAction: 2);
+
+				// PlayBuf works, but for continuous sound, you need long samples.
+				// Does not loop seamlessly
+
+				sig = PlayBuf.ar( 1, 
+					\buf.kr(0), 
+					1,
+					trigger,
+					loop: 1
+				);
+
+				// sig = Warp1.ar(
+				// 	1, 
+				// 	\buf.kr(0),
+				// 	Phasor.kr(trigger, SampleDur.ir / BufDur.ir(\buf.kr) / dur ),
+				// 	1, 
+				// 	0.3,
+				// 	-1,
+				// 	8,
+				// 	0.23,
+				// 	4
+				// );
+
+				// Should there be a Compander.ar here? 
+
+				Out.ar(0, sig!2 * env * 0.32);
+
+			}).add;
+
+		};
 		" ".postln;
 		"SynthDef added to server".postln;
 	}

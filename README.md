@@ -1,7 +1,7 @@
 # Cage
 Supercollider Class for playing John Cage "number pieces"
 
-Class takes 5 arguments:
+Class takes 6 arguments:
 
 * Total duration of piece in seconds. <br/>(integer)
 
@@ -12,6 +12,8 @@ Class takes 5 arguments:
 * An array containing the time where a new synth might me triggered, and when it might end. <br/>(2D array : [ [start0, stop0], [start1, stop1] ])
 
 * An array containing the duration for the possible start and stop point. <br/>(2D array, same as above)
+
+* An integer indicating which synth mode the class should use. *1* == Granular timestretch, *2* == Regular sample playback.
 
 These arrays, *__apart from the array of buffers__*, need to be of the same length. Each element in the score-array needs to have a corresponding element sub-array with a startTime/stopTime and startDur/stopDur.
 ```supercollider
