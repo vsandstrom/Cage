@@ -45,7 +45,9 @@ Cage {
 			1.wait;
 
 			loop{
-				("second: " ++ count.asString).postln;
+
+				// ("second: " ++ count.asString).postln;
+
 				for (0, (score.size - 1), {|i| 
 
 
@@ -55,6 +57,14 @@ Cage {
 						// get random integer from start and stop span.
 						startRand = 1.0.sum3rand.abs;
 						stopRand = 1.0.sum3rand.abs;
+
+
+						/*
+						Remember the value of ratio previously performed.
+						Make "informed" decision by including the previous mean value of all
+						previous ratios.
+						*/
+
 						if (startRatio == 0){
 							startRatio = startRand; stopRatio = stopRand;
 						}{ // get mean value abs
@@ -74,7 +84,9 @@ Cage {
 						);
 
 						// ( stoptime + stopRand ) - ( starttime + startRand ) = Duration
-						dur = (( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime)).abs; // abs is nödlösning
+						dur = (
+							( startStop[i][1] + stopTime ) - (startStop[i][0] + startTime)
+						).abs; // abs is nödlösning
 
 						"--------------------------".postln;
 						("SYMBOL [ % ]".format(score[i])).postln;
